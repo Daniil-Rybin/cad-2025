@@ -44,3 +44,12 @@ application {
     // Define the main class for the application.
     mainClass = "ru.bsuedu.cad.lab.App"
 }
+
+tasks.withType<JavaExec> {
+    jvmArgs("-Dfile.encoding=UTF-8")
+    standardOutput = System.out
+    errorOutput = System.err
+}
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
