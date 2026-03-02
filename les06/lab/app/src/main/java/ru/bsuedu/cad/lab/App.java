@@ -1,0 +1,17 @@
+package ru.bsuedu.cad.lab;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class App {
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        ProductProvider provider = context.getBean(ProductProvider.class);
+        Renderer renderer = context.getBean(Renderer.class);
+        renderer.render(provider.getProducts()); // Сохраняем данные в H2
+
+        CategoryRequest request = context.getBean(CategoryRequest.class);
+        request.execute(); // Выводим категории с количеством товаров >1
+    }
+}
