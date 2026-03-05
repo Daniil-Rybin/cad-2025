@@ -49,7 +49,7 @@ public class DataBaseRenderer implements Renderer {
                 ps.executeBatch();
             }
 
-            System.out.println("Данные сохранены в H2");
+            System.out.println("Данные сохранены");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

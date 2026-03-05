@@ -9,9 +9,9 @@ public class App {
 
         ProductProvider provider = context.getBean(ProductProvider.class);
         Renderer renderer = context.getBean(Renderer.class);
-        renderer.render(provider.getProducts()); // Сохраняем данные в H2
+        renderer.render(provider.getProducts());
 
         CategoryRequest request = context.getBean(CategoryRequest.class);
-        request.execute(); // Выводим категории с количеством товаров >1
+        request.execute();
     }
 }
