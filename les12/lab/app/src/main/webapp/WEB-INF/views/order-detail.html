@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали заказа</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #333; }
+        .info-box { background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #ddd; }
+        .info-row { margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-weight: bold; display: inline-block; width: 150px; color: #555; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .total-row { font-weight: bold; background-color: #e8f5e9; }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Детали заказа № <span th:text="${order.id}">1</span></h1>
+
+    <div class="info-box">
+        <div class="info-row">
+            <span class="info-label">Клиент:</span>
+            <span th:text="${order.customer != null ? order.customer.name : 'Не указан'}">Иван Петров</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span th:text="${order.customer != null ? order.customer.email : 'Не указан'}">ivan@mail.ru</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Телефон:</span>
+            <span th:text="${order.customer != null ? order.customer.phone : 'Не указан'}">+7 (999) 123-45-67</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Дата заказа:</span>
+            <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">16.03.2026 12:00</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Статус:</span>
+            <span th:text="${order.status}" style="font-weight:bold;">NEW</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Адрес доставки:</span>
+            <span th:text="${order.shippingAddress}">ул. Ленина, 1</span>
+        </div>
+    </div>
+
+    <h3>Состав заказа</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Категория</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detail : ${order.orderDetails}">
+            <td th:text="${detail.product.name}">Сухой корм</td>
+            <td th:text="${detail.product.category.name}">Корма</td>
+            <td th:text="${detail.quantity}">2</td>
+            <td th:text="${detail.price} + ' руб.'">500 руб.</td>
+            <td th:text="${detail.subtotal} + ' руб.'">1000 руб.</td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="4" style="text-align: right;"><strong>ИТОГО:</strong></td>
+            <td><strong th:text="${order.totalPrice} + ' руб.'">1000 руб.</strong></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/zoostore/orders" class="btn">← К списку заказов</a>
+</div>
+</body>
+</html>
