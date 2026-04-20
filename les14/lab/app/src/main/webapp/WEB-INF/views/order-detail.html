@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали заказа</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #333; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .info-row {
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 160px;
+            color: #555;
+        }
+        .info-value {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f5f5f5; }
+        .total-row {
+            font-weight: bold;
+            background-color: #e8f5e9 !important;
+            font-size: 1.1em;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover { background-color: #45a049; }
+        .btn-back {
+            background-color: #607d8b;
+        }
+        .btn-back:hover { background-color: #546e7a; }
+        .btn-delete {
+            background-color: #f44336;
+        }
+        .btn-delete:hover { background-color: #da190b; }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-NEW { background-color: #fff3e0; color: #e65100; }
+        .status-PROCESSING { background-color: #e3f2fd; color: #1565c0; }
+        .status-PAID { background-color: #e8f5e9; color: #2e7d32; }
+        .status-SHIPPED { background-color: #f3e5f5; color: #6a1b9a; }
+        .status-DELIVERED { background-color: #e0f2f1; color: #00695c; }
+        .status-CANCELLED { background-color: #ffebee; color: #c62828; }
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .btn-logout {
+            background-color: #999;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Заказ № <span th:text="${order.id}">1</span></h1>
+        <div class="user-info">
+            <span sec:authentication="name">user</span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn-logout">Выйти</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="info-row">
+            <span class="info-label">Клиент:</span>
+            <span class="info-value" th:text="${order.customer != null ? order.customer.name : 'Не указан'}">Иван Петров</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value" th:text="${order.customer != null ? order.customer.email : 'Не указан'}">ivan@mail.ru</span>
+        </div>
+        <div class="info-row" th:if="${order.customer != null && order.customer.phone != null}">
+            <span class="info-label">Телефон:</span>
+            <span class="info-value" th:text="${order.customer.phone}">+7 (999) 123-45-67</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Дата заказа:</span>
+            <span class="info-value" th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">16.03.2026 12:00</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Статус:</span>
+            <span class="info-value">
+                <span class="status-badge"
+                      th:text="${order.status}"
+                      th:class="'status-badge status-' + ${order.status}">NEW</span>
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Адрес доставки:</span>
+            <span class="info-value" th:text="${order.shippingAddress}">ул. Ленина, 1</span>
+        </div>
+    </div>
+
+    <h3>Состав заказа</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Категория</th>
+            <th>Количество</th>
+            <th>Цена за ед.</th>
+            <th>Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detail : ${order.orderDetails}">
+            <td th:text="${detail.product.name}">Сухой корм</td>
+            <td th:text="${detail.product.category.name}">Корма</td>
+            <td th:text="${detail.quantity}">2</td>
+            <td th:text="${#numbers.formatDecimal(detail.price, 0, 'COMMA', 2, 'POINT')} + ' руб.'">500.00 руб.</td>
+            <td th:text="${#numbers.formatDecimal(detail.subtotal, 0, 'COMMA', 2, 'POINT')} + ' руб.'">1000.00 руб.</td>
+        </tr>
+        <tr th:if="${order.orderDetails.empty}">
+            <td colspan="5" style="text-align: center;">Нет товаров в заказе</td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="4" style="text-align: right;"><strong>ИТОГО:</strong></td>
+            <td><strong th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 2, 'POINT')} + ' руб.'">1000.00 руб.</strong></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="/zoostore/orders" class="btn btn-back">К списку заказов</a>
+
+        <form th:if="${#authorization.expression('hasRole(''MANAGER'')')}"
+              th:action="@{/orders/{id}/delete(id=${order.id})}"
+              method="post"
+              style="display: inline;"
+              onsubmit="return confirm('Вы уверены, что хотите удалить заказ №' + ${order.id} + '?')">
+            <button type="submit" class="btn btn-delete">Удалить заказ</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
