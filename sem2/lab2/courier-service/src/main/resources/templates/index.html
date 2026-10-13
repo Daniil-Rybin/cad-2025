@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Курьерская служба</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>Курьерская служба</h1>
+<h2>Управление заявками</h2>
+
+<div class="toolbar">
+    <form th:action="@{/search}" method="get">
+        <input type="text" name="query" placeholder="Поиск по клиенту/адресу"/>
+        <button type="submit" class="btn">Найти</button>
+    </form>
+
+    <form th:action="@{/filter}" method="get">
+        <select name="category">
+            <option value="Документы">Документы</option>
+            <option value="Продукты">Продукты</option>
+            <option value="Хрупкое">Хрупкое</option>
+            <option value="Габаритное">Габаритное</option>
+        </select>
+        <button type="submit" class="btn">Фильтр по категории</button>
+    </form>
+
+    <a th:href="@{/}"><button class="btn">Сбросить</button></a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Клиент</th>
+        <th>Откуда</th>
+        <th>Куда</th>
+        <th>Категория</th>
+        <th>Курьер</th>
+        <th>Вес (кг)</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.clientName}"></td>
+        <td th:text="${order.pickupAddress}"></td>
+        <td th:text="${order.deliveryAddress}"></td>
+        <td th:text="${order.category}"></td>
+        <td th:text="${order.courierName}"></td>
+        <td th:text="${order.weight}"></td>
+        <td>
+            <span th:text="${order.status}"
+                  th:classappend="'status-' + ${order.status}"></span>
+        </td>
+        <td>
+            <form th:action="@{/updateStatus/{id}(id=${order.id})}"
+                  method="post" style="display:inline;">
+                <select name="status">
+                    <option value="NEW">NEW</option>
+                    <option value="IN_PROGRESS">IN_PROGRESS</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                </select>
+                <button type="submit" class="btn">OK</button>
+            </form>
+
+            <form th:action="@{/assignCourier/{id}(id=${order.id})}"
+                  method="post" style="display:inline;">
+                <input type="text" name="courierName" placeholder="Курьер" size="10"/>
+                <button type="submit" class="btn">Назначить</button>
+            </form>
+
+            <a th:href="@{/deleteOrder/{id}(id=${order.id})}"
+               onclick="return confirm('Удалить заявку?');">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="form-box">
+    <h2>Оформить новую заявку на доставку</h2>
+    <form th:action="@{/addOrder}" method="post">
+        <label>Клиент:
+            <input type="text" name="clientName" required/>
+        </label><br/>
+        <label>Адрес отправки:
+            <input type="text" name="pickupAddress" required/>
+        </label><br/>
+        <label>Адрес доставки:
+            <input type="text" name="deliveryAddress" required/>
+        </label><br/>
+        <label>Описание груза:
+            <input type="text" name="description"/>
+        </label><br/>
+        <label>Категория:
+            <select name="category">
+                <option value="Документы">Документы</option>
+                <option value="Продукты">Продукты</option>
+                <option value="Хрупкое">Хрупкое</option>
+                <option value="Габаритное">Габаритное</option>
+            </select>
+        </label><br/>
+        <label>Вес (кг):
+            <input type="number" step="0.1" name="weight" required/>
+        </label><br/>
+        <button type="submit" class="btn">Создать заявку</button>
+    </form>
+</div>
+</body>
+</html>
