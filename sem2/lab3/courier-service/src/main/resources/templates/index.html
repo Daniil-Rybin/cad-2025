@@ -21,7 +21,6 @@
     </form>
 </div>
 
-<!-- Панель поиска и фильтра -->
 <div class="toolbar">
     <form th:action="@{/search}" method="get">
         <input type="text" name="query" placeholder="Поиск по клиенту/адресу"/>
@@ -41,7 +40,6 @@
     <a th:href="@{/}"><button class="btn">Сбросить</button></a>
 </div>
 
-<!-- Таблица заявок -->
 <table>
     <thead>
     <tr>
@@ -70,7 +68,6 @@
                   th:classappend="'status-' + ${order.status}"></span>
         </td>
         <td>
-            <!-- Смена статуса — только MODERATOR -->
             <form th:action="@{/updateStatus/{id}(id=${order.id})}"
                   method="post" style="display:inline;"
                   sec:authorize="hasRole('MODERATOR')">
@@ -83,7 +80,6 @@
                 <button type="submit" class="btn">OK</button>
             </form>
 
-            <!-- Назначение курьера — COURIER или MODERATOR -->
             <form th:action="@{/assignCourier/{id}(id=${order.id})}"
                   method="post" style="display:inline;"
                   sec:authorize="hasAnyRole('COURIER', 'MODERATOR')">
@@ -91,7 +87,6 @@
                 <button type="submit" class="btn">Назначить</button>
             </form>
 
-            <!-- Удаление — только MODERATOR -->
             <a th:href="@{/deleteOrder/{id}(id=${order.id})}"
                onclick="return confirm('Удалить заявку?');"
                sec:authorize="hasRole('MODERATOR')">Удалить</a>
@@ -100,7 +95,6 @@
     </tbody>
 </table>
 
-<!-- Форма создания заявки — всем аутентифицированным -->
 <div class="form-box" sec:authorize="isAuthenticated()">
     <h2>Оформить новую заявку на доставку</h2>
     <form th:action="@{/addOrder}" method="post">
@@ -130,6 +124,5 @@
         <button type="submit" class="btn">Создать заявку</button>
     </form>
 </div>
-
 </body>
 </html>
