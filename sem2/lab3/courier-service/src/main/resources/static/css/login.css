@@ -1,0 +1,117 @@
+.login-page {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 30px 35px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-title {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 24px;
+    text-align: center;
+}
+
+.login-subtitle {
+    margin: 0 0 20px 0;
+    color: #7f8c8d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.login-form label {
+    font-size: 14px;
+    color: #2c3e50;
+    margin-top: 10px;
+    font-weight: bold;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.login-form input {
+    padding: 10px 12px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.login-form input::placeholder {
+    text-align: center;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #4ca1af;
+    box-shadow: 0 0 0 2px rgba(76, 161, 175, 0.2);
+}
+
+.login-btn {
+    margin-top: 20px;
+    padding: 12px;
+    background: #2c3e50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+    text-align: center;
+}
+
+.login-btn:hover {
+    background: #4ca1af;
+}
+
+.login-alert {
+    padding: 10px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.login-alert-error {
+    background: #fdecea;
+    color: #c0392b;
+    border: 1px solid #f5b7b1;
+}
+
+.login-alert-success {
+    background: #eafaf1;
+    color: #1e8449;
+    border: 1px solid #abebc6;
+}

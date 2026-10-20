@@ -49,17 +49,25 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // статика и кастомная страница входа — доступны без аутентификации
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/", true)
+                        .loginPage("/login")              // ← наша кастомная страница
+                        .loginProcessingUrl("/login")     // ← куда уходит POST
+                        .defaultSuccessUrl("/", true)     // после входа — на главную
+                        .failureUrl("/login?error")       // при ошибке — на /login?error
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login?logout") // после выхода — на /login?logout
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 );
         return http.build();
     }
+
 }

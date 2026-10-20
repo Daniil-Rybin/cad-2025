@@ -14,7 +14,7 @@
 <div class="toolbar">
     <span>Вы вошли как:
         <b sec:authentication="name">user</b>
-        (<span sec:authentication="principal.authorities">ROLE_USER</span>)
+        <!--(<span sec:authentication="principal.authorities">ROLE_USER</span>)-->
     </span>
     <form th:action="@{/logout}" method="post" style="display:inline;">
         <button type="submit" class="btn">Выйти</button>
@@ -96,7 +96,7 @@
 </table>
 
 <div class="form-box" sec:authorize="isAuthenticated()">
-    <h2>Оформить новую заявку на доставку</h2>
+    <h3>Оформить новую заявку на доставку</h3>
     <form th:action="@{/addOrder}" method="post">
         <label>Клиент:
             <input type="text" name="clientName" required/>
