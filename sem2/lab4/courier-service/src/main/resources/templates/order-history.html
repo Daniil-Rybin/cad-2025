@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>История заявки</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<h1>История заявки №<span th:text="${order.id}"></span></h1>
+<p><b>Клиент:</b> <span th:text="${order.clientName}"></span></p>
+<p><b>Текущий статус:</b> <span th:text="${order.status}"></span></p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Когда</th>
+        <th>Старый статус</th>
+        <th>Новый статус</th>
+        <th>Кто изменил</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="h : ${history}">
+        <td th:text="${#temporals.format(h.changedAt, 'dd.MM.yyyy HH:mm:ss')}"></td>
+        <td th:text="${h.oldStatus}"></td>
+        <td th:text="${h.newStatus}"></td>
+        <td th:text="${h.changedBy}"></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(history)}">
+        <td colspan="4">История пуста — статус ещё не менялся</td>
+    </tr>
+    </tbody>
+</table>
+
+<p style="margin-top: 20px;"><a th:href="@{/}">← Назад к списку</a></p>
+
+</body>
+</html>

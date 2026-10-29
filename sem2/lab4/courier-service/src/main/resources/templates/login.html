@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход — Курьерская служба</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body class="login-page">
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <h1 class="login-title">Курьерская служба</h1>
+        <p class="login-subtitle">Вход в систему</p>
+
+        <div th:if="${param.error}" class="login-alert login-alert-error">
+            Неверный логин или пароль
+        </div>
+
+        <form th:action="@{/login}" method="post" class="login-form">
+            <label for="username">Логин</label>
+            <input type="text" id="username" name="username"
+                   placeholder="Введите логин" required autofocus/>
+
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Введите пароль" required/>
+
+            <button type="submit" class="btn login-btn">Войти</button>
+        </form>
+        <div th:if="${param.registered}" class="login-alert login-alert-success">
+            Регистрация успешна! Войдите с новым логином.
+        </div>
+        <p style="margin-top: 20px; text-align: center;">
+            Нет аккаунта?
+            <a th:href="@{/register}" style="color: #2c3e50; font-weight: bold;">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>
